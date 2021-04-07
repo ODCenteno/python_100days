@@ -68,6 +68,7 @@ Coffee: {rsc["coffee"]}g
 Money: {profit}""")
     time.sleep(10)
 
+
 def process_coins(coffee_cost):
     """Prompt to the user the amount to pay with coins"""
     print(f"Please insert the coins...")
@@ -81,6 +82,7 @@ def process_coins(coffee_cost):
     time.sleep(5)
     proceed = check_transaction(value_inserted, coffee_cost)
     return proceed
+
 
 def check_transaction(coins_value, coffee_cost):
     """Check that the user has inserted enough money to purchase the drink they selected"""
@@ -97,9 +99,24 @@ def check_transaction(coins_value, coffee_cost):
         print(f"Sorry, that is not enough money. Money refunded.")
         return False
 
-def make_coffee():
+
+def make_coffee(user_choice):
     """Show time and the coffee is made with the resources that then are deducted from the coffee machine resources"""
-    pass
+
+    if user_choice == '1':
+        type_of_coffee = "espresso"
+    elif user_choice == '2':
+        type_of_coffee = "latte"
+    elif user_choice == '3':
+        type_of_coffee = "cappuccino"
+
+    print(f'Making the most delicious coffee on earth...')
+    time.sleep(4)
+    rsc["water"] = rsc["water"] - menu[type_of_coffee]["ingredients"]["water"]
+    rsc["milk"] = rsc["milk"] - menu[type_of_coffee]["ingredients"]["milk"]
+    rsc["coffee"] = rsc["coffee"] - menu[type_of_coffee]["ingredients"]["coffee"]
+    print(f"Here is your {type_of_coffee}, enjoy!")
+    time.sleep(4)
 
 
 def power():
@@ -128,16 +145,17 @@ if __name__ == '__main__':
         getting_ready = check_resources(user_choice)
 
         if getting_ready == "stand_by":
-            print(f'We should wait for the technician to fill the machine ')
+            print(f'We should wait for the technician to refill the machine resources.')
             time.sleep(6)
             continue
         elif getting_ready != "stand_by":
             print(f"You Select: {getting_ready[0]}.\n")
             print(f"The cost of the {getting_ready[0]} is ${getting_ready[1]}.")
-            check_pay = process_coins(getting_ready[1])
+            coffee_cost = getting_ready[1]
+            check_pay = process_coins(coffee_cost)
             if check_pay:
-                make_coffee()
-                profit = getting_ready[1]
+                make_coffee(user_choice)
+                profit = profit + getting_ready[1]
             else:
                 time.sleep(5)
                 continue
