@@ -4,6 +4,8 @@
 *.DS_*
 *.pdf
 *.xlm
+*.pyc
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Images template
 # JPEG
@@ -337,6 +339,10 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+*_Pycache*
+.idea
+Pip*
+*.lock
 
 # Directories potentially created on remote AFP share
 .AppleDB
