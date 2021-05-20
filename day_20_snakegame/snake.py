@@ -8,7 +8,6 @@ DOWN = 270
 
 
 class Snake:
-
     def __init__(self, snake_color="#007580"):
         self.squares = []
         self.color = snake_color

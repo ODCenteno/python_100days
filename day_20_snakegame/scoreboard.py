@@ -1,12 +1,10 @@
 from turtle import Turtle
 
-
-
 ALIGNMENT = "center"
 FONT = ("helvetica", 24, "bold")
 
-class Scoreboard(Turtle):
 
+class Scoreboard(Turtle):
     def __init__(self):
         super().__init__()
         self.ht()
