@@ -1,4 +1,6 @@
 from turtle import Turtle
+from scoreboard import Scoreboard
+
 START = [(0, 0), (-20, 0), (-40, 0)]
 MOVE_DISTANCE = 20
 UP = 90
@@ -35,6 +37,13 @@ class Snake:
             self.squares[i].goto(new_x, new_y)
         self.head.forward(MOVE_DISTANCE)
 
+    def reset_snake(self):
+        for sqr in self.squares:
+            sqr.goto(1000,1000)
+        self.squares.clear()
+        self.create_snake()
+        self.head = self.squares[0]
+
     def up(self):
         if self.head.heading() != DOWN:
             self.head.setheading(UP)
@@ -50,3 +59,4 @@ class Snake:
     def left(self):
         if self.head.heading() != RIGHT:
             self.squares[0].setheading(180)
+
