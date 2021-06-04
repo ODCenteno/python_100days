@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import pyperclip
+import json
 
 from password_generator import create_password
 
@@ -24,28 +25,59 @@ def call_password():
 # ------------ SAVE PASSWORD
 
 def save():
-    entry_list = [website_entry.get(), user_entry.get(), password_entry.get()]
-    save_list = f'{entry_list[0]} | {entry_list[1]} | {entry_list[2]}\n'
+    website = website_entry.get()
+    email = user_entry.get()
+    password = password_entry.get()
+    new_data = {
+        website: {
+            "email": email,
+            "password": password,
+        }
+    }
 
-    if len(entry_list[0]) == 0 or len(entry_list[2]) == 0:
+    if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title='Opps', message='Do not let any field empty')
     else:
-        is_ok = messagebox.askokcancel(title='New Password Details',
-                                       message=f'These are the details entered:\n\n'
-                                               f'Website: {entry_list[0]}\n'
-                                               f'Email/User: {entry_list[1]} '
-                                               f'Password: {entry_list[2]}'
-                                       )
+        try:
+            with open('data.json', 'r') as data_file:
+                data = json.load(data_file)
+        except FileNotFoundError as ferr:
+            with open('data.json', "w") as data_file:
+                json.dump(new_data, data_file, indent=4)
+        else:
+            data.update(new_data)
 
-        if is_ok:
-            with open('data.txt', mode='a', encoding='utf-8') as data:
-                data.write(save_list)
-        website_entry.delete(0, 'end')
-        password_entry.delete(0, 'end')
+            with open('data.json', "w") as data_file:
+                json.dump(data, data_file, indent=4)
+        finally:
+            website_entry.delete(0, 'end')
+            password_entry.delete(0, 'end')
+
+# ------------ SEARCH PASSWORD
+
+def find_password():
+    website = website_entry.get()
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError as ferr:
+        messagebox.showinfo(title='Error loading the file', message=f'{ferr}')
+    else:
+        for (web, val) in data.items():
+            print(f'this is web: {web}')
+            if web == website:
+                password = val['password']
+                email = val['email']
+                print(f'email: {email}, password: {password}.')
+                messagebox.showinfo(title=web, message=f'email: {email}\npassword: {password}')
+                break
+            else:
+                messagebox.showinfo(title=website, message=f'Can not find any data for {website}')
+                break
+
 
 
 # ------------ UI SETUP
-
 
 # Window display
 window = Tk()
@@ -60,15 +92,15 @@ canva.create_image(110, 110, image=file_img)
 canva.grid(column=1, row=0, pady=5)
 
 # Entry inputs
-website_entry = Entry(width=35)
-website_entry.grid(column=1, row=1, columnspan=2, pady=5)
+website_entry = Entry(width=23)
+website_entry.grid(column=1, row=1, pady=5)
 website_entry.focus()  # El cursor apunta a este Entry
 
 user_entry = Entry(width=35)
 user_entry.grid(column=1, row=2, columnspan=2, pady=5)
 user_entry.insert(0, 'daniel.centeno.manzo@gmail.com')
 
-password_entry = Entry(width=19)
+password_entry = Entry(width=23)
 password_entry.grid(column=1, row=3, columnspan=1, pady=5)
 
 # Labels
@@ -82,6 +114,9 @@ password_label = Label(text='Password: ', font=('helvetica', 16))
 password_label.grid(column=0, row=3, pady=5)
 
 # Buttons
+search_button = Button(text='Search', width=15, font=('helvetica', 12), command=find_password)
+search_button.grid(column=2, row=1, pady=5)
+
 generate_pass_button = Button(text='Generate Password', font=('helvetica', 12), command=call_password)
 generate_pass_button.grid(column=2, row=3, pady=5)
 
