@@ -2,4 +2,4 @@
 
 ---
 
-Creaction of an GUI for a trivia app using an API.
+Creaction of an GUI for a trivia app using an quiz API.

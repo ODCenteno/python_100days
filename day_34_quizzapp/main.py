@@ -12,10 +12,7 @@ for question in question_data:
 
 
 quiz = QuizBrain(question_bank)
-get_question = quiz.next_question()
-# print(f"get_question: {get_question}" )
-quiz_ui = QuizInterface()
-quiz_ui.quote_text.itemconfig(quiz_ui.quote_text, text=get_question)
+quiz_ui = QuizInterface(quiz)
 
 # while quiz.still_has_questions():
 #     quiz.next_question()
