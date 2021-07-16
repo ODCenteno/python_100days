@@ -15,3 +15,7 @@ The One Call API provides the following weather data for any geographical coordi
 * Daily forecast for 7 days
 * National weather alerts
 * Historical weather data for the previous 5 days
+
+**Web page to preview JSON files: http://jsonviewer.stack.hu/**
+
+**Live Weather Forecast: [Ventusky](https://www.ventusky.com/)
