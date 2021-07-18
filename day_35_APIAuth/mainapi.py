@@ -1,14 +1,18 @@
 """Main Python file for the 35th codding day. Using the Open Weather API"""
 
+import os
 import requests
+from twilio.rest import Client
 
+from keys import keys
 
 API_ENDPOINT = "https://api.openweathermap.org/data/2.5/onecall"
+OWM_API_key = keys["OWM_API_key"]
 params = {
-    "lat": 18.229412,
-    "lon": -94.893153,
+    "lat": 29.951065,
+    "lon": -90.071533,
     "units": "metric",
-    "appid": "cd3c3d5e6757ca22d3c3e2a35a9f25df",
+    "appid": OWM_API_key,
     "exclude": "current,minutely,daily",
 }
 
@@ -34,7 +38,18 @@ for hour_data in weather_slice:
         will_rain = True
 
 if will_rain:
-    print("Bring and umbrella")
+    account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
+    auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
+    client = Client(account_sid, auth_token)
+
+    message = client.messages \
+        .create(
+        body="It's going to rain today though ☔️",
+        from_='+16159916129',
+        to='+525574017790',
+    )
+
+    print(message.status)
 
 
 for temp in range(0, 12):
