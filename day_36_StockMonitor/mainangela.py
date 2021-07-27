@@ -54,11 +54,33 @@ day_before_yesterday_closing_price = float(stock_closing_prices[1])
 print(f"{yesterday_closing_price}\n{day_before_yesterday_closing_price}")
 
 # Calculate the percentage difference
-price_difference = abs(yesterday_closing_price - day_before_yesterday_closing_price)
+price_difference = round(yesterday_closing_price - day_before_yesterday_closing_price)
+up_down = None
+if price_difference > 0:
+    up_down = "🔺"
+else:
+    up_down = "🔻"
+
 diff_percent = (price_difference / yesterday_closing_price) * 100
 print(f"diff_percent: {diff_percent}")
 
-if diff_percent > 0.5:
+if abs(diff_percent) > 0.5:
     news_articles = get_news()
     three_articles = news_articles[:3]
-    print(three_articles)
+    formatted_articles = [f"{STOCK}: {diff_percent} % {up_down}\nHeadline: {article['title']}.\nBrief: {article['description']}" for article in three_articles]
+
+
+    # STEP 3: Use twilio.com/docs/sms/quickstart/python
+    account_sid = TWILIO_ACC_ID
+    auth_token = TWILIO_API_KEY
+    client = Client(account_sid, auth_token)
+
+    for article in formatted_articles:
+        message = client.messages \
+                        .create(
+                             body=article,
+                             from_='+16159916129',
+                             to='+525574017790',
+                         )
+
+        print(message.sid)
