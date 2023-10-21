@@ -5,6 +5,7 @@
 *.pdf
 *.xlm
 *.pyc
+settings.py
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Images template
@@ -353,4 +354,5 @@ Temporary Items
 
 *.pdf
 venv/
+.env
 
